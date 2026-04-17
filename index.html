@@ -130,9 +130,9 @@
         </div>
       </div>
       <button class="btn" id="generateBtn">Generate Fractal</button>
-      <div class="control-group">
-        <label>Color Cycling</label>
+      <div class="control-group" style="margin-top: 1rem;">
         <div class="btn-row">
+          <button class="btn secondary" id="fullscreenBtn">Full Screen</button>
           <button class="btn secondary" id="cycleBtn">Start Cycling</button>
           <button class="btn secondary" id="stopCycleBtn">Stop</button>
         </div>
@@ -158,6 +158,7 @@
     const stopCycleBtn = document.getElementById('stopCycleBtn');
     const cycleSpeedInput = document.getElementById('cycleSpeed');
     const cycleSpeedValue = document.getElementById('cycleSpeedValue');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
 
     let centerX = -0.5;
     let centerY = 0;
@@ -346,6 +347,28 @@
     });
 
     generateBtn.addEventListener('click', generateFractal);
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (document.fullscreenElement) {
+        fullscreenBtn.textContent = 'Exit Full Screen';
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      } else {
+        fullscreenBtn.textContent = 'Full Screen';
+        canvas.width = 600;
+        canvas.height = 600;
+      }
+      computeFractal();
+      renderFractal();
+    });
 
     generateFractal();
   </script>
