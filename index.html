@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#e94560">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>Fractal Generator - Mandelbrot Set</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -101,6 +106,16 @@
       color: #888;
       margin-top: 0.5rem;
     }
+    @media (max-width: 600px) {
+      .container { padding: 1rem; }
+      h1 { font-size: 1.25rem; }
+      canvas { max-width: 100vw; height: auto; }
+      .controls { padding: 1rem; }
+      .btn { padding: 0.875rem 1.25rem; font-size: 1rem; }
+      .color-scheme-btn, .btn.secondary { padding: 0.625rem 0.875rem; font-size: 0.875rem; }
+      .btn-row { flex-direction: column; }
+      .btn-row .btn { width: 100%; }
+    }
   </style>
 </head>
 <body>
@@ -109,7 +124,7 @@
   </header>
   <div class="container">
     <div class="canvas-container">
-      <canvas id="fractalCanvas" width="600" height="600"></canvas>
+      <canvas id="fractalCanvas" width="600" height="600" style="max-width: 100%;"></canvas>
     </div>
     <div class="controls">
       <div class="control-group">
@@ -349,28 +364,38 @@
     generateBtn.addEventListener('click', generateFractal);
 
     fullscreenBtn.addEventListener('click', () => {
+      const elem = document.documentElement;
       if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen();
+        (elem.requestFullscreen || elem.webkitRequestFullscreen || elem.mozRequestFullScreen || elem.msRequestFullscreen).call(elem);
       } else {
-        document.exitFullscreen();
+        (document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen || document.msExitFullscreen).call(document);
       }
     });
 
-    document.addEventListener('fullscreenchange', () => {
-      if (document.fullscreenElement) {
+    const handleFullscreenChange = () => {
+      const fsEl = document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement || document.msFullscreenElement;
+      if (fsEl) {
         fullscreenBtn.textContent = 'Exit Full Screen';
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
       } else {
         fullscreenBtn.textContent = 'Full Screen';
-        canvas.width = 600;
-        canvas.height = 600;
+        canvas.width = Math.min(600, window.innerWidth);
+        canvas.height = canvas.width;
       }
       computeFractal();
       renderFractal();
-    });
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+    document.addEventListener('MSFullscreenChange', handleFullscreenChange);
 
     generateFractal();
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
   </script>
 </body>
 </html>
