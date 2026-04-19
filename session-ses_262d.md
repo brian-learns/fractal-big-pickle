@@ -2,7 +2,7 @@
 
 **Session ID:** ses_262d70a67ffefH50SPsuVazIZe
 **Created:** 4/17/2026, 1:36:40 PM
-**Updated:** 4/17/2026, 2:09:42 PM
+**Updated:** 4/17/2026, 2:46:17 PM
 
 ---
 
@@ -2136,6 +2136,173 @@ Fixed and pushed! The controls have been restored:
 - Cycle Speed slider
 
 The site should work now at https://brian-learns.github.io/fractal-big-pickle/
+
+---
+
+## User
+
+Create or update `AGENTS.md` for this repository.
+
+The goal is a compact instruction file that helps future OpenCode sessions avoid mistakes and ramp up quickly. Every line should answer: "Would an agent likely miss this without help?" If not, leave it out.
+
+User-provided focus or constraints (honor these):
+
+
+## How to investigate
+
+Read the highest-value sources first:
+- `README*`, root manifests, workspace config, lockfiles
+- build, test, lint, formatter, typecheck, and codegen config
+- CI workflows and pre-commit / task runner config
+- existing instruction files (`AGENTS.md`, `CLAUDE.md`, `.cursor/rules/`, `.cursorrules`, `.github/copilot-instructions.md`)
+- repo-local OpenCode config such as `opencode.json`
+
+If architecture is still unclear after reading config and docs, inspect a small number of representative code files to find the real entrypoints, package boundaries, and execution flow. Prefer reading the files that explain how the system is wired together over random leaf files.
+
+Prefer executable sources of truth over prose. If docs conflict with config or scripts, trust the executable source and only keep what you can verify.
+
+## What to extract
+
+Look for the highest-signal facts for an agent working in this repo:
+- exact developer commands, especially non-obvious ones
+- how to run a single test, a single package, or a focused verification step
+- required command order when it matters, such as `lint -> typecheck -> test`
+- monorepo or multi-package boundaries, ownership of major directories, and the real app/library entrypoints
+- framework or toolchain quirks: generated code, migrations, codegen, build artifacts, special env loading, dev servers, infra deploy flow
+- repo-specific style or workflow conventions that differ from defaults
+- testing quirks: fixtures, integration test prerequisites, snapshot workflows, required services, flaky or expensive suites
+- important constraints from existing instruction files worth preserving
+
+Good `AGENTS.md` content is usually hard-earned context that took reading multiple files to infer.
+
+## Questions
+
+Only ask the user questions if the repo cannot answer something important. Use the `question` tool for one short batch at most.
+
+Good questions:
+- undocumented team conventions
+- branch / PR / release expectations
+- missing setup or test prerequisites that are known but not written down
+
+Do not ask about anything the repo already makes clear.
+
+## Writing rules
+
+Include only high-signal, repo-specific guidance such as:
+- exact commands and shortcuts the agent would otherwise guess wrong
+- architecture notes that are not obvious from filenames
+- conventions that differ from language or framework defaults
+- setup requirements, environment quirks, and operational gotchas
+- references to existing instruction sources that matter
+
+Exclude:
+- generic software advice
+- long tutorials or exhaustive file trees
+- obvious language conventions
+- speculative claims or anything you could not verify
+- content better stored in another file referenced via `opencode.json` `instructions`
+
+When in doubt, omit.
+
+Prefer short sections and bullets. If the repo is simple, keep the file simple. If the repo is large, summarize the few structural facts that actually change how an agent should work.
+
+If `AGENTS.md` already exists at `/Users/tingle/code/fractal-big-pickle`, improve it in place rather than rewriting blindly. Preserve verified useful guidance, delete fluff or stale claims, and reconcile it with the current codebase.
+
+---
+
+## Assistant (Build · Big Pickle · 7.4s)
+
+_Thinking:_
+
+The user wants me to create or update an AGENTS.md file for this repository. Let me first check if it already exists.
+
+
+**Tool: glob**
+
+**Input:**
+```json
+{
+  "path": "/Users/tingle/code/fractal-big-pickle",
+  "pattern": "AGENTS.md"
+}
+```
+
+**Output:**
+```
+No files found
+```
+
+---
+
+## Assistant (Build · Big Pickle · 4.1s)
+
+_Thinking:_
+
+No AGENTS.md exists. This is a very simple single-page HTML/JS project - no build system, no tests, no linting. It's a simple fractal generator deployed via GitHub Pages.
+
+Given the simplicity, I should keep the AGENTS.md very minimal.
+
+
+**Tool: write**
+
+**Input:**
+```json
+{
+  "content": "# Fractal Big Pickle\n\nSimple single-page fractal generator (Mandelbrot set) with vanilla HTML/JS.\n\n## Tech Stack\n- Pure HTML + CSS + JavaScript (no build system)\n- Canvas API for rendering\n- Deployed via GitHub Pages\n\n## Commands\n- No build commands needed - edit `index.html` directly\n- To test: open `index.html` in a browser\n\n## Deployment\n- GitHub Pages enabled on `main` branch\n- Source path: `/` (root)\n- URL: https://brian-learns.github.io/fractal-big-pickle/\n- Push to `main` to deploy\n\n## Architecture\n- Single HTML file: `index.html`\n- Color schemes defined in JS object (`colorSchemes`)\n- Fractal data cached in `iterationData` Uint8Array for fast color cycling\n- Click on canvas to zoom in 2x at click location",
+  "filePath": "/Users/tingle/code/fractal-big-pickle/AGENTS.md"
+}
+```
+
+**Output:**
+```
+Wrote file successfully.
+```
+
+---
+
+## Assistant (Build · Big Pickle · 3.8s)
+
+_Thinking:_
+
+The AGENTS.md file was created. Let me also check if it needs to be committed to git.
+
+
+**Tool: bash**
+
+**Input:**
+```json
+{
+  "command": "git add AGENTS.md && git commit -m \"Add AGENTS.md\" && git push",
+  "description": "Commit and push AGENTS.md"
+}
+```
+
+**Output:**
+```
+[main 098fede] Add AGENTS.md
+ 1 file changed, 24 insertions(+)
+ create mode 100644 AGENTS.md
+To https://github.com/brian-learns/fractal-big-pickle.git
+   399739c..098fede  main -> main
+
+```
+
+---
+
+## Assistant (Build · Big Pickle · 2.5s)
+
+_Thinking:_
+
+Created and pushed AGENTS.md with relevant information about this simple HTML/JS project.
+
+
+
+
+Done! Created `AGENTS.md` with:
+- Tech stack (vanilla HTML/JS, no build)
+- Commands (edit directly, open in browser)
+- Deployment info (GitHub Pages on main)
+- Architecture notes (single file, cached iteration data for color cycling)
 
 ---
 
